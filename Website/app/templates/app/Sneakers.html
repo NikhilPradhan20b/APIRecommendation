@@ -1,0 +1,28 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Buy Now{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+
+<div class="col-sm-8">
+  <div class="'row"></div>
+   {% for product in Sneakers %} 
+
+    <div class="col-sm-4 text-center mb-4>
+    <a href="{% url 'product-detail' product.id %}" class="btn">
+     <div class="item">
+       {% for s in Sneakers %}
+       <a href="{% url 'product-detail' s.id %}" class="btn"><div class="item"><img src="{{s.product_image.url}}" alt="" height="200px"><span class="fw-bold">{{s.title}}</span><br><span class="fs-5">{{s.price}}</span></div></a>
+       {% endfor %}
+       <!-- <img src="{{product.product_image.url}}" alt="" height="300" class=""> -->
+       <!-- <div class="fw-bold">{{product.title}}</div> -->
+     <!-- <div class="fw-bold">Rs.{{product.price}}</div> -->
+    
+    </div>
+    <!-- </a> -->
+    </div>
+    {% endfor %}
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

@@ -1,0 +1,112 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Product Detail{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  <div class="col-sm-6 text-center align-self-center">
+   <img src="{{product.product_image.url}}" alt="" class="img-fluid img-thumbnail">
+  </div>
+  <div class="col-sm-5 offset-sm-1">
+   <h2>Product Title: {{product.title}}</h2>
+   <h3>Rs. {{product.price}}</h3> 
+   <hr>
+   <p>{{product.description}}</p> <br>
+   <form action="/add-to-cart" class="d-inline">
+   <input type="hidden" name="prod_id" value={{product.id}} id="prod_id">
+   <button type="submit" class="btn btn-primary shadow px-5 py-2">Add to cart</button>
+   </form>
+   <a href="{% url 'buy-now' %}" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a>
+   <hr>
+   <h4>Rate this product</h4>
+   <div class="stars" name ="rate" data-rating="1">
+       <span class="star">&nbsp;</span>
+       <span class="star">&nbsp;</span>
+       <span class="star">&nbsp;</span>
+       <span class="star">&nbsp;</span>
+       <span class="star">&nbsp;</span>
+   </div>
+   <div class ="col-md-6">
+    <h6 class="text-uppercase">Write Your Review</h6>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}}" role="alert">
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <form class="review-form my-margin" action="/product/addcomment/{{product.id}}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input name ="subject" type="text" placeholder="subject" class="large-input" />
+        </div>
+        
+        <div class="form-group">
+            <textarea name ="comment" class ="input large-input" type="text" placeholder="Your review"></textarea>
+        </div>
+           
+
+            <!-- alternate codepen version https://codepen.io/mad-d/pen/aJMPWr?editors=0010 -->
+            <!-- <h4>Rate this product</h4>
+            <div class="stars" name ="rate" data-rating="1">
+                <span class="star">&nbsp;</span>
+                <span class="star">&nbsp;</span>
+                <span class="star">&nbsp;</span>
+                <span class="star">&nbsp;</span>
+                <span class="star">&nbsp;</span>
+            </div> -->
+            
+            <input type="hidden" name="rating"  id="data-rating-value">
+            
+            <script>
+                
+                //initial setup
+                document.addEventListener('DOMContentLoaded', function(){
+                    let stars = document.querySelectorAll('.star');
+                    stars.forEach(function(star){
+                        star.addEventListener('click', setRating); 
+                    });
+                    
+                    let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
+                    let target = stars[rating - 1];
+                    target.dispatchEvent(new MouseEvent('click'));
+                });
+        
+                function setRating(ev){
+                    let span = ev.currentTarget;
+                    let stars = document.querySelectorAll('.star');
+                    let match = false;
+                    let num = 0;
+                    stars.forEach(function(star, index){
+                        if(match){
+                            star.classList.remove('rated');
+                        }else{
+                            star.classList.add('rated');
+                        }
+                        //are we currently looking at the span that was clicked
+                        if(star === span){
+                            match = true;
+                            num = index + 1;
+                        }
+                    });
+                    document.querySelector('.stars').setAttribute('data-rating', num);
+                    document.getElementById('data-rating-value').value = num;
+                }
+            </script>
+    
+        <button type="submit" class="btn btn-primary shadow px-5 py-2">Submit</button>
+
+
+    </form>
+
+</div>
+   <h5 class="mt-5">Available Offers</h5>
+   <ul>
+    <li>Bank Offer 5% Unlimited Cashback on Bank Credit</li>
+    <li>Free delivery on shopping above Rs5000</li>
+    <li>Special Price Get extra Rs3000 off (price inclusive of discount)</li>
+   </ul>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}
